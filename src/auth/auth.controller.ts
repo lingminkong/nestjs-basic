@@ -12,11 +12,7 @@ export class AuthController {
   }
 
   @Post('signup')
-  signUp(
-    @Body() body: AuthDTO,
-    @Body('password', ParseIntPipe) password: number,
-  ) {
-    console.log('typeOfPassword', typeof password);
-    return this.authService.signUp();
+  signUp(@Body() dto: AuthDTO) {
+    return this.authService.signUp(dto);
   }
 }
