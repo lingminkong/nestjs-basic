@@ -36,4 +36,6 @@ npx prisma studio
 
 ### install nest build-in class validator
 
-`npm i --save class-validator class-transformer`
+```
+npm i --save class-validator class-transformer
+```
