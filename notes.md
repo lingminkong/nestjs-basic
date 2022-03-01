@@ -26,6 +26,11 @@ export class AuthController {
 
 It is common that a controller has the same function structure as corresponding service.
 
+## Run a Prisma migration
+
+1. update the prisma schema in `prisma/schema.prisma`
+2. run `npx prisma migrate dev` to do a migration. This will generate a new migration file with provided migration name
+
 ## Commands
 
 ### open a web database interface
