@@ -1,5 +1,6 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, ParseIntPipe, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthDTO } from './dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,7 +12,11 @@ export class AuthController {
   }
 
   @Post('signup')
-  signUp() {
+  signUp(
+    @Body() body: AuthDTO,
+    @Body('password', ParseIntPipe) password: number,
+  ) {
+    console.log('typeOfPassword', typeof password);
     return this.authService.signUp();
   }
 }

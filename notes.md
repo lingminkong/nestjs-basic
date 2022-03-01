@@ -25,3 +25,15 @@ export class AuthController {
 ## Controller & Services (Providers)
 
 It is common that a controller has the same function structure as corresponding service.
+
+## Commands
+
+### open a web database interface
+
+```
+npx prisma studio
+```
+
+### install nest build-in class validator
+
+`npm i --save class-validator class-transformer`
