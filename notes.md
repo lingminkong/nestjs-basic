@@ -44,3 +44,9 @@ npx prisma studio
 ```
 npm i --save class-validator class-transformer
 ```
+
+## Good to know
+
+By default, NestJs returns 201 http status code with any Post request. Normally 201 status code means that new entry/data has been created in backend. We can use built-in decorate `@HttpCode()` to modify returned status code.
+
+NestJs has a built-in enum `HttpStatus` with various status code to be used.
