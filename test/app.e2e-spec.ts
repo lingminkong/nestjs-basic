@@ -112,10 +112,22 @@ describe('Test e2e', () => {
           .spec()
           .post('/auth/login')
           .withBody(dto)
-          .expectStatus(200);
+          .expectStatus(200)
+          .stores('jwt', 'jwt');
       });
     });
   });
-  it.todo('User');
+  describe('User', () => {
+    it('Should get user profile', () => {
+      return pactum
+        .spec()
+        .get('/users/profile')
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(200);
+    });
+
+    it.todo('edit user');
+  });
+
   it.todo('Bookmark');
 });
