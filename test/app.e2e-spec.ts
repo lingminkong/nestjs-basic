@@ -123,10 +123,24 @@ describe('Test e2e', () => {
         .spec()
         .get('/users/profile')
         .withHeaders('Authorization', 'Bearer $S{jwt}')
-        .expectStatus(200);
+        .expectStatus(200)
+        .expectBodyContains(dto.email);
     });
 
-    it.todo('edit user');
+    describe('Test edit user profile', () => {
+      it('Should update user profile correctly', () => {
+        const payload = {
+          firstName: 'Michael',
+        };
+        return pactum
+          .spec()
+          .patch('/users/edit')
+          .withHeaders('Authorization', 'Bearer $S{jwt}')
+          .withBody(payload)
+          .expectStatus(200)
+          .expectBodyContains(payload.firstName);
+      });
+    });
   });
 
   it.todo('Bookmark');
