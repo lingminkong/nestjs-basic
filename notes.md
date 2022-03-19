@@ -50,3 +50,9 @@ npm i --save class-validator class-transformer
 By default, NestJs returns 201 http status code with any Post request. Normally 201 status code means that new entry/data has been created in backend. We can use built-in decorate `@HttpCode()` to modify returned status code.
 
 NestJs has a built-in enum `HttpStatus` with various status code to be used.
+
+- handle edit bookmark request dto => id should in params
+- expect body type array => can check on array length, expectJsonLength(1);
+- parse id string in params => user ParseIntPipe @Param('id', ParseIntPipe) bookmarkId: number
+- empty subroute handling => @Get()
+- parameter route handling => @Get(':id')

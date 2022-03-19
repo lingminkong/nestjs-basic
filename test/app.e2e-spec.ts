@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { PrismaService } from './../src/prisma/prisma.service';
 import { AppModule } from './../src/app.module';
 import { AuthDTO } from 'src/auth/dto';
+import { CreateBookmarkDTO } from 'src/bookmark/dto/create-bookmark.dto';
 
 describe('Test e2e', () => {
   let app: INestApplication;
@@ -55,6 +56,7 @@ describe('Test e2e', () => {
           .withBody({
             password: dto.password,
           })
+          .stores('userId', 'id')
           .expectStatus(400);
       });
 
@@ -143,5 +145,84 @@ describe('Test e2e', () => {
     });
   });
 
-  it.todo('Bookmark');
+  describe('Bookmark', () => {
+    const payload = {
+      title: 'freecodecamp',
+      description: 'my first bookmark',
+      link: 'https://freecodecamp.org',
+    };
+
+    it('Should get empty bookmarks before create one', () => {
+      return pactum
+        .spec()
+        .get('/bookmarks')
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(200)
+        .expectBody([]);
+    });
+
+    it('Should create bookmark', () => {
+      return pactum
+        .spec()
+        .post('/bookmarks')
+        .withBody(payload)
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .stores('bookmarkId', 'id')
+        .expectStatus(201)
+        .expectBodyContains(payload.title)
+        .expectBodyContains(payload.link)
+        .expectBodyContains(payload.description);
+    });
+
+    it('Test edit bookmark by id', () => {
+      const payload = {
+        description: 'updated bookmark',
+      };
+      return pactum
+        .spec()
+        .patch('/bookmarks/edit/$S{bookmarkId}')
+        .withBody(payload)
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(200)
+        .expectBodyContains(payload.description)
+        .expectBodyContains('$S{bookmarkId}');
+    });
+
+    it('Test get bookmarks', () => {
+      return pactum
+        .spec()
+        .get('/bookmarks')
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(200)
+        .expectJsonLength(1);
+    });
+
+    it('Test get bookmark by id', () => {
+      return pactum
+        .spec()
+        .get('/bookmarks/$S{bookmarkId}')
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(200)
+        .expectBodyContains(payload.title)
+        .expectBodyContains(payload.link)
+        .expectBodyContains('$S{bookmarkId}');
+    });
+
+    it('Test delete bookmark by id', () => {
+      return pactum
+        .spec()
+        .delete('/bookmarks/$S{bookmarkId}')
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(204);
+    });
+
+    it('Should get empty bookmarks after delete', () => {
+      return pactum
+        .spec()
+        .get('/bookmarks')
+        .withHeaders('Authorization', 'Bearer $S{jwt}')
+        .expectStatus(200)
+        .expectBody([]);
+    });
+  });
 });
